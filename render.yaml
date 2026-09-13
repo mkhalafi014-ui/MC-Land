@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: mcland-chat-2026
+    runtime: node
+    plan: free
+    buildCommand: npm install --prefix backend
+    startCommand: node backend/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
