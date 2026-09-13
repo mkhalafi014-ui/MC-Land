@@ -22,6 +22,8 @@ const io=new Server(server,{cors:{origin:'*',methods:['GET','POST']}});
 app.use(cors({origin:'*'}));
 app.use(express.json({limit:'2mb'}));
 app.get('/api/health',(_,r)=>r.json({ok:true,service:'MC LAND',realtime:true}));
+app.get('/chat-real.js',(_,r)=>r.sendFile(path.join(__dirname,'..','chat-real.js')));
+app.get('/',(_,r)=>{try{const html=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');r.type('html').send(html.replace('</body>','<script src="/chat-real.js"></script></body>'));}catch{r.status(500).send('MC LAND site unavailable');}});
 
 function auth(req,res,next){try{const h=req.headers.authorization||'';if(!h.startsWith('Bearer '))return res.status(401).json({error:'ورود لازم است'});req.user=jwt.verify(h.slice(7),SECRET);next()}catch{return res.status(401).json({error:'توکن نامعتبر است'})}}
 
